@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package de.samorei.hashpay;
+
+service HashPay {
+
+    rpc createAccount (CreationRequest) returns (ServerReply) {}
+
+    rpc refreshHash (RefreshRequest) returns (ServerReply) {}
+
+    rpc payment (PaymentRequest) returns (ServerReply) {}
+  
+    rpc deposit (DepositRequest) returns (ServerReply) {}
+  
+    rpc getBalance (BalanceRequest) returns (ServerReply) {}
+  }
+
+  message CreationRequest {
+    Identification requestor = 1;
+  }
+
+  message RefreshRequest {
+    Identification requestor = 1;
+    Password newPassword = 2;
+  }
+  
+  message PaymentRequest {
+    Identification requestor = 1;
+    Identification authority = 2;
+    double amount = 3;
+  }
+  
+  message DepositRequest {
+    Identification requestor = 1;
+    Identification authority = 2;
+    double amount = 3;
+  }
+  
+  message BalanceRequest {
+    Identification requestor = 1;
+  }
+  
+  message ServerReply {
+    string balance = 1;
+    enum Status {
+        CREATIONSUCCESS = 0;
+        CREATIONFAILURE = 1;
+        PAYMENTSUCCESS = 2;
+        PAYMENTFAILURE = 3;
+        DEPOSITSUCCESS = 4;
+        DEPOSITFAILURE = 5;
+        REFRESHSUCCESS = 6;
+        REFRESHFAILURE = 7;
+        BALANCESUCCESS = 8;
+        BALANCEFAILURE = 9;
+    } 
+  }
+
+  message Identification {
+    string username = 1;
+    Password password = 2;
+  }
+
+  message Password {
+    bytes hash = 1;
+    int32 hashIndex = 2;
+  }
